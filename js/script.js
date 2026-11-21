@@ -60,7 +60,8 @@ searchInput.addEventListener("input", function () {
 });
 
 
-// Contact form validation
+// Contact form: live checks, a character counter, and a Send button that
+// stays disabled until every field is valid
 const form = document.getElementById("contact-form");
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
@@ -69,46 +70,98 @@ const nameError = document.getElementById("name-error");
 const emailError = document.getElementById("email-error");
 const messageError = document.getElementById("message-error");
 const formSuccess = document.getElementById("form-success");
+const sendButton = document.getElementById("send-btn");
+const sendHint = document.getElementById("send-hint");
+const messageCount = document.getElementById("message-count");
+
+const MAX_MESSAGE = 500;
+const MIN_MESSAGE = 10;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Each check returns an error message, or "" when the field is fine
+function checkName() {
+  return nameInput.value.trim() === "" ? "Please enter your name." : "";
+}
+
+function checkEmail() {
+  return emailPattern.test(emailInput.value.trim())
+    ? ""
+    : "Please enter a valid email, like name@example.com.";
+}
+
+function checkMessage() {
+  return messageInput.value.trim().length < MIN_MESSAGE
+    ? "Please write a message of at least " + MIN_MESSAGE + " characters."
+    : "";
+}
+
+// Each field with its error element and its check
+const fields = [
+  { input: nameInput, error: nameError, check: checkName },
+  { input: emailInput, error: emailError, check: checkEmail },
+  { input: messageInput, error: messageError, check: checkMessage }
+];
+
+// Enable Send only when all fields pass, and hide the hint when it is enabled
+function updateSendButton() {
+  const allValid = fields.every(function (field) {
+    return field.check() === "";
+  });
+  sendButton.disabled = !allValid;
+  sendHint.hidden = allValid;
+}
+
+function updateCounter() {
+  messageCount.textContent = messageInput.value.length + " / " + MAX_MESSAGE;
+}
+
+fields.forEach(function (field) {
+  // While typing: clear the error once the field is valid, then update the button
+  field.input.addEventListener("input", function () {
+    if (field.check() === "") {
+      field.error.textContent = "";
+    }
+    updateSendButton();
+  });
+
+  // When leaving the field: show its error if it is wrong
+  field.input.addEventListener("blur", function () {
+    field.error.textContent = field.check();
+  });
+});
+
+messageInput.addEventListener("input", updateCounter);
 
 form.addEventListener("submit", function (event) {
   // Stop the page from reloading
   event.preventDefault();
-
-  let isValid = true;
   formSuccess.hidden = true;
 
-  // Name must not be empty
-  if (nameInput.value.trim() === "") {
-    nameError.textContent = "Please enter your name.";
-    isValid = false;
-  } else {
-    nameError.textContent = "";
+  // Check every field again before accepting the form
+  let isValid = true;
+  fields.forEach(function (field) {
+    const message = field.check();
+    field.error.textContent = message;
+    if (message !== "") {
+      isValid = false;
+    }
+  });
+
+  if (!isValid) {
+    return;
   }
 
-  // Email must look like name@example.com
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(emailInput.value.trim())) {
-    emailError.textContent = "Please enter a valid email, like name@example.com.";
-    isValid = false;
-  } else {
-    emailError.textContent = "";
-  }
-
-  // Message must have at least 10 characters
-  if (messageInput.value.trim().length < 10) {
-    messageError.textContent = "Please write a message of at least 10 characters.";
-    isValid = false;
-  } else {
-    messageError.textContent = "";
-  }
-
-  // If everything is valid, show the confirmation and clear the form
-  if (isValid) {
-    formSuccess.textContent = "Thanks, " + nameInput.value.trim() + "! Your message was submitted.";
-    formSuccess.hidden = false;
-    form.reset();
-  }
+  // Everything is valid: confirm, then clear the form
+  formSuccess.textContent = "Thanks, " + nameInput.value.trim() + "! Your message was submitted.";
+  formSuccess.hidden = false;
+  form.reset();
+  updateCounter();
+  updateSendButton();
 });
+
+// Set the starting state
+updateCounter();
+updateSendButton();
 
 // Quotes: fetch a random quote from the DummyJSON API
 const quoteText = document.getElementById("quote-text");

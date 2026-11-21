@@ -96,10 +96,12 @@
                 <p class="error" id="email-error"></p>
 
                 <label for="message">Message</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
+                <textarea id="message" name="message" rows="5" maxlength="500" required></textarea>
+                <p id="message-count">0 / 500</p>
                 <p class="error" id="message-error"></p>
 
-                <button type="submit">Send</button>
+                <button type="submit" id="send-btn" disabled>Send</button>
+                <p id="send-hint">Fill in every field correctly to enable the Send button.</p>
 
                 <!-- Shown after a valid submit -->
                 <p id="form-success" role="status" hidden></p>

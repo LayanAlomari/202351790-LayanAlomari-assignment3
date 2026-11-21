@@ -152,6 +152,17 @@ form {
   margin-top: 15px;
 }
 
+#message-count {
+  text-align: right;
+  font-size: 0.85rem;
+  margin: 5px 0 0;
+}
+
+#send-hint {
+  font-size: 0.9rem;
+  margin: 10px 0 0;
+}
+
 /* Lighter colors for dark mode so they stay readable */
 body.dark-mode .error {
   color: #ff8a8a;
