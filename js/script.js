@@ -109,3 +109,42 @@ form.addEventListener("submit", function (event) {
     form.reset();
   }
 });
+
+// Quotes: fetch a random quote from the DummyJSON API
+const quoteText = document.getElementById("quote-text");
+const quoteAuthor = document.getElementById("quote-author");
+const quoteButton = document.getElementById("new-quote-btn");
+const quoteStatus = document.getElementById("quote-status");
+
+async function loadQuote() {
+  // Show a loading message and stop double clicks while we wait
+  quoteStatus.textContent = "Loading quote...";
+  quoteButton.disabled = true;
+
+  try {
+    const response = await fetch("https://dummyjson.com/quotes/random");
+
+    // fetch does not fail on HTTP errors by itself, so we check
+    if (!response.ok) {
+      throw new Error("Server responded with status " + response.status);
+    }
+
+    const data = await response.json();
+    quoteText.textContent = "\u201C" + data.quote + "\u201D";
+    quoteAuthor.textContent = "\u2014 " + data.author;
+    quoteStatus.textContent = "";
+  } catch (error) {
+    // Tell the user what happened and what to do next
+    console.error(error);
+    quoteStatus.textContent =
+      "Sorry, we could not load a quote. Check your internet connection and click New Quote to try again.";
+  } finally {
+    // Runs whether it worked or not
+    quoteButton.disabled = false;
+  }
+}
+
+quoteButton.addEventListener("click", loadQuote);
+
+// Load a first quote when the page opens
+loadQuote();

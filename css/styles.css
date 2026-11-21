@@ -90,6 +90,35 @@ nav a:hover {
   border-radius: 6px;
 }
 
+/* Quotes section */
+#quote-box {
+  background-color: var(--box-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+#quote-text {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin: 0 0 10px;
+}
+
+#quote-author {
+  font-weight: bold;
+  margin: 0;
+}
+
+#quote-status {
+  margin-top: 10px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Contact section */
 #contact h2 {
   text-align: center;
