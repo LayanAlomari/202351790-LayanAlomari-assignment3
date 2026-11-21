@@ -295,6 +295,21 @@ body.dark-mode textarea {
   font-style: italic;
 }
 
+/* Visitor name box */
+#name-box {
+  margin: 10px 0;
+}
+
+#name-box input {
+  max-width: 220px;
+}
+
+#name-box button,
+#change-name-btn {
+  margin-top: 0;
+  padding: 8px 14px;
+}
+
 /* Animations */
 @keyframes fade-in {
   from {

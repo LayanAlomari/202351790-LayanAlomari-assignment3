@@ -1,13 +1,25 @@
-// Greeting based on the time of day
+// Greeting based on the time of day, with the visitor's name if we have it
 const greeting = document.getElementById("greeting");
-const hour = new Date().getHours();
 
-if (hour < 12) {
-  greeting.textContent = "Good morning!";
-} else if (hour < 18) {
-  greeting.textContent = "Good afternoon!";
-} else {
-  greeting.textContent = "Good evening!";
+function updateGreeting() {
+  const hour = new Date().getHours();
+  let message;
+
+  if (hour < 12) {
+    message = "Good morning";
+  } else if (hour < 18) {
+    message = "Good afternoon";
+  } else {
+    message = "Good evening";
+  }
+
+  // Add the name when one is saved
+  const name = localStorage.getItem("visitorName");
+  if (name) {
+    message += ", " + name;
+  }
+
+  greeting.textContent = message + "!";
 }
 
 // Dark/light mode button
@@ -227,3 +239,53 @@ function updateTimer() {
 
 updateTimer();
 setInterval(updateTimer, 1000);
+
+
+// ----- Visitor name -----
+const nameBox = document.getElementById("name-box");
+const visitorInput = document.getElementById("visitor-name");
+const saveNameButton = document.getElementById("save-name-btn");
+const changeNameButton = document.getElementById("change-name-btn");
+const nameMessage = document.getElementById("name-message");
+
+// Show the name form or the "Not you?" button, depending on whether a name is saved
+function showNameState() {
+  const name = localStorage.getItem("visitorName");
+  nameBox.hidden = Boolean(name);
+  changeNameButton.hidden = !name;
+  updateGreeting();
+}
+
+function saveVisitorName() {
+  const name = visitorInput.value.trim();
+
+  // Check the input before saving
+  if (name === "") {
+    nameMessage.textContent = "Please type a name first.";
+    return;
+  }
+
+  localStorage.setItem("visitorName", name);
+  visitorInput.value = "";
+  nameMessage.textContent = "";
+  showNameState();
+}
+
+saveNameButton.addEventListener("click", saveVisitorName);
+
+// Pressing Enter in the box also saves
+visitorInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    saveVisitorName();
+  }
+});
+
+// "Not you?" removes the saved name and shows the form again
+changeNameButton.addEventListener("click", function () {
+  localStorage.removeItem("visitorName");
+  showNameState();
+  visitorInput.focus();
+});
+
+// Set the starting state when the page opens
+showNameState();
