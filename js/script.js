@@ -201,3 +201,29 @@ quoteButton.addEventListener("click", loadQuote);
 
 // Load a first quote when the page opens
 loadQuote();
+
+
+// Timer: how long the visitor has been on the page
+const timerText = document.getElementById("session-timer");
+const timerNote = document.getElementById("timer-note");
+const startTime = Date.now();
+let thanksShown = false;
+
+function updateTimer() {
+  // Work out the time from the start time, so it stays correct even if the tab was in the background
+  const totalSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  // padStart adds a leading zero, so 5 becomes "05"
+  timerText.textContent = "Time on this page: " + minutes + ":" + String(seconds).padStart(2, "0");
+
+  // After one minute, show a message once
+  if (totalSeconds >= 60 && !thanksShown) {
+    timerNote.textContent = "Thanks for staying a while! Feel free to send me a message.";
+    thanksShown = true;
+  }
+}
+
+updateTimer();
+setInterval(updateTimer, 1000);
