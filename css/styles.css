@@ -90,6 +90,35 @@ nav a:hover {
   border-radius: 6px;
 }
 
+/* Quotes section */
+#quote-box {
+  background-color: var(--box-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+#quote-text {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin: 0 0 10px;
+}
+
+#quote-author {
+  font-weight: bold;
+  margin: 0;
+}
+
+#quote-status {
+  margin-top: 10px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Contact section */
 #contact h2 {
   text-align: center;
@@ -121,6 +150,17 @@ form {
   color: #1b6e2d;
   font-weight: bold;
   margin-top: 15px;
+}
+
+#message-count {
+  text-align: right;
+  font-size: 0.85rem;
+  margin: 5px 0 0;
+}
+
+#send-hint {
+  font-size: 0.9rem;
+  margin: 10px 0 0;
 }
 
 /* Lighter colors for dark mode so they stay readable */
@@ -164,12 +204,30 @@ button:hover {
   transform: translateY(-2px);
 }
 
-/* Footer */
+/* Footer*/
 footer {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 20px;
   padding: 20px;
   background-color: var(--box-color);
   border-top: 1px solid var(--border-color);
+}
+
+footer p {
+  margin: 0;
+}
+
+/* The "thanks for staying" note*/
+#timer-note {
+  flex-basis: 100%;
+  text-align: center;
+}
+
+#timer-note:empty {
+  display: none;
 }
 
 /* Tablet */
@@ -192,6 +250,11 @@ footer {
 
   .projects-container {
     grid-template-columns: 1fr;
+  }
+
+  footer {
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -232,12 +295,28 @@ body.dark-mode textarea {
   font-style: italic;
 }
 
+/* Visitor name box */
+#name-box {
+  margin: 10px 0;
+}
+
+#name-box input {
+  max-width: 220px;
+}
+
+#name-box button,
+#change-name-btn {
+  margin-top: 0;
+  padding: 8px 14px;
+}
+
 /* Animations */
 @keyframes fade-in {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
